@@ -1,1 +1,81 @@
++-------------------------------------------------------------------------------------------------+
+|                                         AWS Account                                             |
+|                                                                                                 |
+|  +---------------------------------------- VPC ----------------------------------------------+  |
+|  |                                                                                           |  |
+|  |  +------------------------+       +------------------------+                              |  |
+|  |  |  Public Subnet (AZ1)   |       |  Public Subnet (AZ2)   |                              |  |
+|  |  |  CIDR: 10.0.1.0/24     |       |  CIDR: 10.0.2.0/24     |                              |  |
+|  |  +-----------+------------+       +-----------+------------+                              |  |
+|  |              |                             |                                             |  |
+|  |       +------+-------+               +-----+-------+                                      |  |
+|  |       |  NAT Gateway |               | NAT Gateway |                                      |  |
+|  |       +------+-------+               +-----+-------+                                      |  |
+|  |              |                             |                                             |  |
+|  |  +-----------+------------+       +--------+-----------+                                 |  |
+|  |  |  Private Subnet (AZ1)  |       |  Private Subnet (AZ2) |                              |  |
+|  |  |  CIDR: 10.0.101.0/24   |       |  CIDR: 10.0.102.0/24  |                              |  |
+|  |  +-----------+------------+       +-----------+-----------+                              |  |
+|  |              |                             |                                             |  |
+|  |      +-------v--------+             +------v--------+                                     |  |
+|  |      |   Worker Node  |             |  Worker Node  |                                     |  |
+|  |      |   (EC2 - EKS)  |             |  (EC2 - EKS)  |                                     |  |
+|  |      +-------+--------+             +------+--------+                                     |  |
+|  |              |                             |                                             |  |
+|  |  +-----------v------------+       +--------v-----------+                                 |  |
+|  |  |  MyCompany API Pod     |       |  MyCompany API Pod |                                 |  |
+|  |  +-----------+------------+       +-----------+--------+                                 |  |
+|  |              |                             |                                             |  |
+|  |          +---v---+                     +---v---+                                          |  |
+|  |          |Service|<--------------------+Service|                                          |  |
+|  |          +---+---+                     +---+---+                                          |  |
+|  |              |                             |                                             |  |
+|  |         +----v----+                   +----v----+                                         |  |
+|  |         |LoadBalancer|                |LoadBalancer|                                      |  |
+|  |         +----+----+                   +----+----+                                         |  |
+|  |              |                             |                                             |  |
+|  |         Internet Traffic                 Internet Traffic                                 |  |
+|  |                                                                                           |  |
+|  |  +-------------------------------- RDS Instance --------------------------------------+   |  |
+|  |  |                                                                                     |   |  |
+|  |  |          MyCompany Production Database (PostgreSQL)                                 |   |  |
+|  |  |          - Hosted in Private Subnet                                                |   |  |
+|  |  |          - Security Group restricts access                                         |   |  |
+|  |  +-------------------------------------------------------------------------------------+   |  |
+|  +-------------------------------------------------------------------------------------------+  |
+|                                                                                                 |
+|                                        AWS Services                                             |
+|                                                                                                 |
+|   - IAM Roles & Policies                                                                        |
+|       - For EC2 instances, EKS nodes, and services                                              |
+|                                                                                                 |
+|   - S3 Bucket                                                                                   |
+|       - For Terraform state backend                                                             |
+|                                                                                                 |
+|   - DynamoDB Table                                                                              |
+|       - For Terraform state locking                                                             |
+|                                                                                                 |
+|   - ECR (Elastic Container Registry)                                                            |
+|       - Stores Docker images for MyCompany API                                                  |
+|                                                                                                 |
++-------------------------------------------------------------------------------------------------+
+
+CI/CD Pipeline (GitHub Actions)
+--------------------------------
+- Triggered on code push to main branch
+- Builds Docker image and pushes to ECR
+- Updates Kubernetes manifests with new image
+- Applies changes to EKS cluster
+
+Observability Stack
+--------------------
+- Prometheus and Grafana deployed via Helm charts
+- Monitors cluster and application metrics
+- Centralized logging with AWS CloudWatch Logs
+
+Security Components
+--------------------
+- Secrets managed with AWS Secrets Manager
+- Kubernetes secrets synced using External Secrets Operator
+- Network policies restrict traffic between pods
 
