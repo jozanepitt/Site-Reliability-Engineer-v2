@@ -1,1 +1,19 @@
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: mycompany-api-network-policy
+spec:
+  podSelector:
+    matchLabels:
+      app: mycompany-api
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - podSelector:
+            matchLabels:
+              app: mycompany-ingress-controller
+      ports:
+        - protocol: TCP
+          port: 8080
 
