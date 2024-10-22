@@ -1,1 +1,64 @@
 
+name: MyCompany API CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build-and-push-docker-image:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install Dependencies
+        run: |
+          pip install -r app/requirements.txt
+
+      - name: Run Unit Tests
+        run: |
+          python -m unittest discover app/tests
+
+      - name: Login to Docker Registry
+        run: |
+          echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
+
+      - name: Build Docker Image
+        run: |
+          docker build -t mycompanyregistry/mycompany-api:${{ github.sha }} app/
+
+      - name: Push Docker Image
+        run: |
+          docker push mycompanyregistry/mycompany-api:${{ github.sha }}
+
+  deploy-to-eks:
+    needs: build-and-push-docker-image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-west-2
+
+      - name: Update kubeconfig
+        run: |
+          aws eks update-kubeconfig --name mycompany-prod-eks-cluster --region us-west-2
+
+      - name: Set Image Tag
+        run: |
+          sed -i "s|mycompanyregistry/mycompany-api:1.0.0|mycompanyregistry/mycompany-api:${{ github.sha }}|g" kubernetes/deployment.yaml
+
+      - name: Deploy to EKS
+        run: |
+          kubectl apply -f kubernetes/
