@@ -26,7 +26,7 @@ A comprehensive infrastructure setup for deploying the **MyCompany API** applica
 
 ## Architecture Overview
 
-![Architecture Diagram](docs/architecture-diagram.png)
+![Architecture Diagram](doc/Infra Diagram)
 
 **Components:**
 
