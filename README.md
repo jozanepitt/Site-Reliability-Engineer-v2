@@ -40,3 +40,27 @@ A comprehensive infrastructure setup for deploying the **MyCompany API** applica
 
 ## Project Structure
 
+---
+
+## Prerequisites
+
+- **AWS Account** with permissions to create VPCs, EKS clusters, RDS instances, and other resources.
+- **AWS CLI** configured with your AWS credentials.
+- **Terraform** v1.0 or later.
+- **Docker** installed and running.
+- **kubectl** installed and configured.
+- **Helm** package manager for Kubernetes.
+- **Python** 3.9 or later.
+- **Git** for version control.
+
+---
+
+## Setup Instructions
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/your-username/mycompany-api-infrastructure.git
+cd mycompany-api-infrastructure/
+
+
