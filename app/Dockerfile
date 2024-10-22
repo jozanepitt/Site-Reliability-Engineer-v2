@@ -1,25 +1,24 @@
 # Use a minimal base image
-FROM python:3.9-slim
+FROM python:3.9-slim-buster
 
 # Set work directory
-WORKDIR /app
+WORKDIR /usr/src/mycompany_api
 
 # Copy requirements
-COPY requirements.txt .
+COPY requirements.txt ./
 
 # Install dependencies
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy application code
-COPY . .
+COPY mycompany_api/ ./mycompany_api/
 
 # Expose port
-EXPOSE 80
+EXPOSE 8080
 
-# Run as non-root user
-RUN useradd -m myuser
-USER myuser
+# Create a user and switch to it
+RUN groupadd -r mycompany && useradd -r -g mycompany mycompanyuser
+USER mycompanyuser
 
-# Start the application
-CMD ["python", "app.py"]
-
+# Start the application using Gunicorn
+CMD ["gunicorn", "--bind", "0.0.0.0:8080", "mycompany_api.main:app"]
