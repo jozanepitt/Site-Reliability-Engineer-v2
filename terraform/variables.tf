@@ -1,10 +1,20 @@
 variable "aws_region" {
-  description = "AWS region to deploy resources"
+  description = "The AWS region where resources will be deployed"
+  default     = "us-west-2"
 }
 
-variable "cluster_name" {
-  description = "EKS Cluster name"
+variable "environment" {
+  description = "Deployment environment"
+  default     = "production"
 }
 
-# ... other variables
+variable "db_username" {
+  description = "Database master username"
+}
 
+variable "db_password" {
+  description = "Database master password"
+  sensitive   = true
+}
+
+# ... other variables as needed
