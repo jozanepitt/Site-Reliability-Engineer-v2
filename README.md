@@ -1,139 +1,60 @@
-MyCompany API Infrastructure
-A comprehensive infrastructure setup for deploying the MyCompany API application using Terraform, Docker, and Kubernetes on AWS EKS.
+# MyCompany API Infrastructure
 
-b. Architecture Overview
-<!-- Include a diagram in the docs folder -->
+A comprehensive infrastructure setup for deploying the **MyCompany API** application using Terraform, Docker, and Kubernetes on AWS EKS. This repository demonstrates best practices in infrastructure as code (IaC), containerization, orchestration, and CI/CD pipelines.
 
-Architecture Components:
+---
 
-AWS VPC (mycompany-production-vpc):
-Custom VPC with public and private subnets across two availability zones.
-AWS EKS Cluster (mycompany-prod-eks-cluster):
-Managed Kubernetes cluster for container orchestration.
-AWS RDS PostgreSQL Instance (mycompany-prod-db):
-Relational database for application data storage.
-CI/CD Pipeline:
-Automated builds and deployments using GitHub Actions.
-c. Prerequisites
-AWS Account with appropriate permissions.
-Terraform v1.0 or later.
-AWS CLI configured with credentials.
-kubectl for interacting with Kubernetes clusters.
-Docker for building container images.
-Python 3.9 or later.
-d. Setup Instructions
-Terraform Setup
-Configure AWS Credentials:
+## Table of Contents
 
-Ensure your AWS CLI is configured with the necessary permissions.
+- [Architecture Overview](#architecture-overview)
+- [Prerequisites](#prerequisites)
+- [Setup Instructions](#setup-instructions)
+  - [Terraform Setup](#terraform-setup)
+  - [Docker Image Build](#docker-image-build)
+  - [Kubernetes Deployment](#kubernetes-deployment)
+- [Observability](#observability)
+- [CI/CD Pipeline](#cicd-pipeline)
+- [Security Considerations](#security-considerations)
+- [Testing](#testing)
+- [Contribution Guidelines](#contribution-guidelines)
+- [License](#license)
+- [Acknowledgments](#acknowledgments)
 
-Initialize Terraform:
+---
 
-bash
-Copy code
-cd terraform/
-terraform init
-Create a terraform.tfvars File:
+## Architecture Overview
 
-Create a terraform.tfvars file to provide variable values (do not commit this file):
+![Architecture Diagram](docs/architecture-diagram.png)
 
-hcl
-Copy code
-aws_region = "us-west-2"
-environment = "production"
-db_username = "mycompany_db_user"
-db_password = "securepassword123"
-Plan Infrastructure:
+**Components:**
 
-bash
-Copy code
-terraform plan -out=tfplan
-Apply Infrastructure:
+- **AWS VPC (`mycompany-production-vpc`):** Custom VPC with public and private subnets across two availability zones for high availability.
+- **AWS EKS Cluster (`mycompany-prod-eks-cluster`):** Managed Kubernetes cluster for deploying containerized applications.
+- **AWS RDS PostgreSQL Instance (`mycompany-prod-db`):** Relational database service for application data storage.
+- **CI/CD Pipeline:** Automated build and deployment pipeline using GitHub Actions.
+- **Observability Stack:** Monitoring and logging using Prometheus, Grafana, and AWS CloudWatch.
 
-bash
-Copy code
-terraform apply tfplan
-Docker Image Build
-Build Docker Image:
+---
 
-bash
-Copy code
-cd app/
-docker build -t mycompanyregistry/mycompany-api:1.0.0 .
-Push Docker Image:
+## Prerequisites
 
-bash
-Copy code
-docker login -u your-username -p your-password
-docker push mycompanyregistry/mycompany-api:1.0.0
-Kubernetes Deployment
-Update kubeconfig:
+- **AWS Account** with permissions to create VPCs, EKS clusters, RDS instances, and other resources.
+- **AWS CLI** configured with your AWS credentials.
+- **Terraform** v1.0 or later.
+- **Docker** installed and running.
+- **kubectl** installed and configured.
+- **Helm** package manager for Kubernetes.
+- **Python** 3.9 or later.
+- **Git** for version control.
 
-bash
-Copy code
-aws eks update-kubeconfig --name mycompany-prod-eks-cluster --region us-west-2
-Deploy Manifests:
+---
 
-bash
-Copy code
-cd kubernetes/
-kubectl apply -f .
-e. Observability
-Monitoring:
+## Setup Instructions
 
-Deploy Prometheus and Grafana using the Prometheus Community Helm Chart.
+### Terraform Setup
 
-bash
-Copy code
-helm repo add prometheus-community https://prometheus-community.github.io/helm-charts
-helm repo update
-helm install mycompany-monitoring prometheus-community/kube-prometheus-stack
-Access Grafana and import dashboards for Kubernetes and application metrics.
+1. **Clone the Repository:**
 
-Logging:
-
-Use AWS CloudWatch Logs for centralized logging.
-Configure Fluentd or Fluent Bit as a DaemonSet to forward logs to CloudWatch.
-f. CI/CD Pipeline
-Pipeline Overview:
-Build and Test:
-On every push to main, the pipeline builds the Docker image and runs unit tests.
-Deploy:
-After a successful build, the new image is deployed to the EKS cluster.
-Versioning:
-Docker images are tagged with the Git commit SHA for traceability.
-g. Security Considerations
-IAM Roles and Policies:
-
-Use IAM roles for service accounts (IRSA) to grant Kubernetes pods access to AWS services securely.
-Follow the principle of least privilege for all IAM roles.
-Secrets Management:
-
-Use AWS Secrets Manager to store sensitive information.
-Integrate with Kubernetes using the External Secrets Operator.
-Network Security:
-
-Utilize Security Groups and Network ACLs to control traffic.
-Implement Kubernetes Network Policies to restrict pod-to-pod communication.
-h. Testing
-Application Tests:
-
-bash
-Copy code
-cd app/
-python -m unittest discover tests
-Infrastructure Validation:
-
-Use terraform validate to check the Terraform configuration.
-Use kubectl apply --dry-run=client -f kubernetes/ to validate Kubernetes manifests.
-i. Contribution Guidelines
-Branching Strategy:
-
-Use feature branches for new features and bug fixes.
-Submit Pull Requests for code reviews.
-Commit Messages:
-
-Follow the Conventional Commits specification.
-Issue Tracking:
-
-Use GitHub Issues to track bugs and feature requests.
+   ```bash
+   git clone https://github.com/your-username/mycompany-api-infrastructure.git
+   cd mycompany-api-infrastructure/terraform/
