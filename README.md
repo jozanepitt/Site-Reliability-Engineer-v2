@@ -7,13 +7,15 @@ A comprehensive infrastructure setup for deploying the **MyCompany API** applica
 ## Table of Contents
 
 - [Architecture Overview](#architecture-overview)
+- [Project Structure](#project-structure)
 - [Prerequisites](#prerequisites)
 - [Setup Instructions](#setup-instructions)
-  - [Terraform Setup](#terraform-setup)
-  - [Docker Image Build](#docker-image-build)
-  - [Kubernetes Deployment](#kubernetes-deployment)
+  - [1. Clone the Repository](#1-clone-the-repository)
+  - [2. Application Development (`app/`)](#2-application-development-app)
+  - [3. Terraform Configuration (`terraform/`)](#3-terraform-configuration-terraform)
+  - [4. Kubernetes Manifests (`kubernetes/`)](#4-kubernetes-manifests-kubernetes)
+  - [5. CI/CD Pipeline (`.github/workflows/ci-cd.yml`)](#5-cicd-pipeline-githubworkflowsci-cdyml)
 - [Observability](#observability)
-- [CI/CD Pipeline](#cicd-pipeline)
 - [Security Considerations](#security-considerations)
 - [Testing](#testing)
 - [Contribution Guidelines](#contribution-guidelines)
@@ -36,25 +38,5 @@ A comprehensive infrastructure setup for deploying the **MyCompany API** applica
 
 ---
 
-## Prerequisites
+## Project Structure
 
-- **AWS Account** with permissions to create VPCs, EKS clusters, RDS instances, and other resources.
-- **AWS CLI** configured with your AWS credentials.
-- **Terraform** v1.0 or later.
-- **Docker** installed and running.
-- **kubectl** installed and configured.
-- **Helm** package manager for Kubernetes.
-- **Python** 3.9 or later.
-- **Git** for version control.
-
----
-
-## Setup Instructions
-
-### Terraform Setup
-
-1. **Clone the Repository:**
-
-   ```bash
-   git clone https://github.com/your-username/mycompany-api-infrastructure.git
-   cd mycompany-api-infrastructure/terraform/
