@@ -1,66 +1,79 @@
-# MyCompany API Infrastructure
+# Site Reliability Engineer (SRE) v2
 
-A comprehensive infrastructure setup for deploying the **MyCompany API** application using Terraform, Docker, and Kubernetes on AWS EKS. This repository demonstrates best practices in infrastructure as code (IaC), containerization, orchestration, and CI/CD pipelines.
+This project demonstrates the setup of a scalable, reliable infrastructure using AWS, Terraform, Kubernetes (EKS), and Docker with best practices in Site Reliability Engineering (SRE). The infrastructure is designed for high availability, fault tolerance, and automated monitoring.
+
+## Key Features
+- **Infrastructure as Code (IaC)** with Terraform
+- **Kubernetes Cluster** with AWS EKS
+- **PostgreSQL Database** with AWS RDS
+- **Docker** for containerization
+- **Monitoring** with Prometheus and Grafana
+- **CI/CD** using GitHub Actions
+- **Load Balancing** and **Autoscaling**
+
+## What's Included
+- AWS resources such as VPC, RDS, EKS, and IAM.
+- Terraform modules to automate infrastructure setup.
+- Monitoring setup with Prometheus and Grafana.
+- Basic Kubernetes manifests for deploying applications.
+
+## What's Missing
+### 1. **Alertmanager Integration**: 
+   - **Task**: Set up Alertmanager to integrate with Prometheus for alerting and configure routes to notify services like Slack.
+   - **Solution**: Implement `alertmanager.yml` configuration and add `alert.rules.yml` in the repository. Configure Prometheus to route alerts to Alertmanager.
+
+### 2. **CloudTrail Setup**: 
+   - **Task**: Enable CloudTrail for AWS API logging.
+   - **Solution**: Add Terraform resources for AWS CloudTrail and configure logging to an S3 bucket.
+
+### 3. **Automated Testing with Terratest**: 
+   - **Task**: Integrate infrastructure testing using Terratest.
+   - **Solution**: Create Go tests for Terraform infrastructure and configure GitHub Actions to run these tests on every commit.
+
+### 4. **Kubernetes Cluster Autoscaler**: 
+   - **Task**: Enable Kubernetes Cluster Autoscaler for EKS.
+   - **Solution**: Install the Cluster Autoscaler via Helm and configure EKS node groups for autoscaling.
+
+## Installation
+
+1. **Clone the Repository**:
+   ```bash
+   git clone https://github.com/jozanepitt/Site-Reliability-Engineer-v2
+   cd Site-Reliability-Engineer-v2
+   ```
+
+2. **Configure AWS CLI**:
+   Ensure your AWS CLI is properly configured with sufficient permissions.
+
+3. **Terraform**:
+   Apply Terraform to set up infrastructure:
+   ```bash
+   terraform init
+   terraform apply
+   ```
+
+4. **Kubernetes Setup**:
+   Deploy applications and services to EKS using kubectl:
+   ```bash
+   kubectl apply -f kubernetes/
+   ```
+
+5. **CI/CD**:
+   Configure GitHub Actions for CI/CD pipelines. Ensure all workflows are up to date and Terraform state management is set up properly.
+
+## Monitoring and Alerts
+- Access Grafana for visualizing metrics.
+- Alertmanager will send alerts to the configured Slack channel once integrated.
+
+## Roadmap
+- [ ] Implement Alertmanager for better alert routing.
+- [ ] Enable AWS CloudTrail for API logging.
+- [ ] Add automated tests with Terratest.
+- [ ] Configure EKS autoscaling with Cluster Autoscaler.
+
+## Contributing
+Feel free to open pull requests or issues for improvements or bug fixes. Contributions are welcome!
 
 ---
 
-## Table of Contents
-
-- [Architecture Overview](#architecture-overview)
-- [Project Structure](#project-structure)
-- [Prerequisites](#prerequisites)
-- [Setup Instructions](#setup-instructions)
-  - [1. Clone the Repository](#1-clone-the-repository)
-  - [2. Application Development (`app/`)](#2-application-development-app)
-  - [3. Terraform Configuration (`terraform/`)](#3-terraform-configuration-terraform)
-  - [4. Kubernetes Manifests (`kubernetes/`)](#4-kubernetes-manifests-kubernetes)
-  - [5. CI/CD Pipeline (`.github/workflows/ci-cd.yml`)](#5-cicd-pipeline-githubworkflowsci-cdyml)
-- [Observability](#observability)
-- [Security Considerations](#security-considerations)
-- [Testing](#testing)
-- [Contribution Guidelines](#contribution-guidelines)
-- [License](#license)
-- [Acknowledgments](#acknowledgments)
-
----
-
-## Architecture Overview
-
-![Architecture Diagram](doc/Infra Diagram)
-
-**Components:**
-
-- **AWS VPC (`mycompany-production-vpc`):** Custom VPC with public and private subnets across two availability zones for high availability.
-- **AWS EKS Cluster (`mycompany-prod-eks-cluster`):** Managed Kubernetes cluster for deploying containerized applications.
-- **AWS RDS PostgreSQL Instance (`mycompany-prod-db`):** Relational database service for application data storage.
-- **CI/CD Pipeline:** Automated build and deployment pipeline using GitHub Actions.
-- **Observability Stack:** Monitoring and logging using Prometheus, Grafana, and AWS CloudWatch.
-
----
-
-## Project Structure
-
----
-
-## Prerequisites
-
-- **AWS Account** with permissions to create VPCs, EKS clusters, RDS instances, and other resources.
-- **AWS CLI** configured with your AWS credentials.
-- **Terraform** v1.0 or later.
-- **Docker** installed and running.
-- **kubectl** installed and configured.
-- **Helm** package manager for Kubernetes.
-- **Python** 3.9 or later.
-- **Git** for version control.
-
----
-
-## Setup Instructions
-
-### 1. Clone the Repository
-
-```bash
-git clone https://github.com/your-username/mycompany-api-infrastructure.git
-cd mycompany-api-infrastructure/
-
-
+This README covers the project's current state, outlines missing features, and provides clear instructions for installation and contributions. You can adjust or expand this based on your specific needs.
